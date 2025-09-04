@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hồ sơ học thuật — Tên của bạn</title>
+  <meta name="description" content="Trang cá nhân học thuật: giới thiệu, công bố, giảng dạy, dự án, phần mềm CADD, CV." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0d10;
+      --card: #12161b;
+      --muted: #9aa4b2;
+      --text: #e6edf3;
+      --brand: #3ba9ff;
+      --accent: #61d095;
+      --border: #1f2937;
+    }
+    :root.light{
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --muted: #4b5563;
+      --text: #111827;
+      --brand: #2563eb;
+      --accent: #0ea5e9;
+      --border: #e5e7eb;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;background:var(--bg);color:var(--text);}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{opacity:.9;text-decoration:underline}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    header.site{
+      position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur(8px);
+      background:color-mix(in oklab, var(--bg), transparent 35%);
+      border-bottom:1px solid var(--border);
+    }
+    .nav{display:flex;gap:18px;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:14px;align-items:center}
+    .brand img{width:54px;height:54px;border-radius:50%;border:2px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+    .brand h1{font-size:20px;line-height:1.1;margin:0;font-weight:700}
+    .brand p{margin:0;font-size:13px;color:var(--muted)}
+    .links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .links a{font-weight:600}
+    .toggle{border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:28px 0}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+    .hero h2{margin-top:0;font-size:28px}
+    .muted{color:var(--muted)}
+    .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .badge{background:color-mix(in oklab, var(--brand), var(--card) 50%);color:#fff;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:600}
+    .social{display:flex;gap:10px;margin-top:8px}
+    .social a{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--card);padding:8px 10px;border-radius:10px}
+    section{scroll-margin-top:90px}
+    h3.section-title{font-size:18px;font-weight:800;letter-spacing:.02em;margin:0 0 14px 0;text-transform:uppercase;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .pub{grid-column:span 12;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
+    .pub .meta{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+    .pub b{font-weight:700}
+    .pill{display:inline-block;border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+    .list{display:flex;flex-direction:column;gap:12px}
+    .project{grid-column:span 6}
+    .pkg{grid-column:span 4}
+    .footer{margin:40px auto 20px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr}
+      .project{grid-column: span 12}
+      .pkg{grid-column: span 12}
+    }
+  </style>
+</head>
+<body>
+  <header class="site">
+    <div class="container nav">
+      <div class="brand">
+        <img src="avatar.jpg" alt="Ảnh chân dung" onerror="this.style.display='none'">
+        <div>
+          <h1>Tên của bạn</h1>
+          <p>Pharmacy | CADD | Machine Learning</p>
+        </div>
+      </div>
+      <nav class="links">
+        <a href="#about">About</a>
+        <a href="#pubs">Publications</a>
+        <a href="#teaching">Teaching</a>
+        <a href="#projects">Projects</a>
+        <a href="#packages">CADD packages</a>
+        <a href="#cv">CV</a>
+        <button id="theme" class="toggle" aria-label="Đổi giao diện">🌗</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="card">
+        <h2>Giới thiệu ngắn</h2>
+        <p class="muted">Viết 2–3 câu súc tích về chuyên môn của bạn (ví dụ: áp dụng ML/DL, cheminformatics và quy trình tự động để sàng lọc phân tử hoạt tính sinh học; quan tâm QSAR, CADD, MD…).</p>
+        <div class="badges">
+          <span class="badge">QSAR / ML</span>
+          <span class="badge">Docking</span>
+          <span class="badge">ADMET</span>
+          <span class="badge">MD 100 ns</span>
+        </div>
+        <div class="social">
+          <a href="mailto:you@example.com" title="Email">✉️ <span>Email</span></a>
+          <a href="https://github.com/yourname" target="_blank" rel="noopener">💻 <span>GitHub</span></a>
+          <a href="https://www.linkedin.com/in/yourname" target="_blank" rel="noopener">🔗 <span>LinkedIn</span></a>
+          <a href="https://orcid.org/0000-0000-0000-0000" target="_blank" rel="noopener">🧬 <span>ORCID</span></a>
+          <a href="https://scholar.google.com/" target="_blank" rel="noopener">📚 <span>Scholar</span></a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Thông tin cá nhân</h2>
+        <ul class="list">
+          <li><b>Đơn vị:</b> Khoa Dược — (ghi tên trường/viện)</li>
+          <li><b>Địa điểm:</b> TP. Hồ Chí Minh, Việt Nam</li>
+          <li><b>Email liên hệ:</b> you@example.com</li>
+          <li><b>Hướng nghiên cứu:</b> biểu diễn phân tử, phát sinh phân tử, CADD cho (ghi đích)…</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="about" class="card">
+      <h3 class="section-title">About me</h3>
+      <p>Tôi là … (viết đoạn giới thiệu 5–7 dòng: nền tảng đào tạo, chủ đề nghiên cứu, phòng thí nghiệm/nhóm nghiên cứu, mục tiêu dài hạn). Trang này lưu các dự án và đoạn mã nền tảng phục vụ nghiên cứu của tôi.</p>
+      <h4>Research interests</h4>
+      <ul>
+        <li>Xây dựng mô hình QSAR/ML cho dữ liệu hoạt tính sinh học.</li>
+        <li>Phát triển phương pháp CADD (pharmacophore, docking, MM/GBSA, MD).</li>
+        <li>Biểu diễn phân tử giàu thông tin lập thể / stereo / ensemble conformer.</li>
+      </ul>
+    </section>
+
+    <section id="pubs" class="card">
+      <h3 class="section-title">Publications (mẫu)</h3>
+      <div class="grid">
+        <article class="pub">
+          <div class="meta"><span class="pill">2025</span><span class="pill">Journal</span></div>
+          <p><b>DeepQSAR: Transferable molecular representation for bioactivity prediction</b><br/>
+            Nguyen T., <u>Tên của bạn</u>, et al. <i>Journal of Molecular Graphics & Modelling</i> (điền DOI)</p>
+          <div class="meta"><a href="#">PDF</a> • <a href="#">BibTeX</a> • <a href="#">Code</a></div>
+        </article>
+        <article class="pub">
+          <div class="meta"><span class="pill">2024</span><span class="pill">Conference</span></div>
+          <p><b>Pipeline tự động sàng lọc ADMET + Docking + MD cho mục tiêu P‑CABs</b><br/>
+            <u>Tên của bạn</u>, et al. <i>Proc. …</i></p>
+          <div class="meta"><a href="#">Slide</a> • <a href="#">Poster</a> • <a href="#">Repo</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="teaching" class="card">
+      <h3 class="section-title">Teaching</h3>
+      <ul class="list">
+        <li><b>Ứng dụng CNTT trong Dược</b> — 2025. Nội dung: LaTeX, trích dẫn, thống kê cơ bản, ANOVA, …</li>
+        <li><b>Pháp chế Dược</b> — 2025. Ngân hàng câu hỏi, rubric, CLOs…</li>
+      </ul>
+    </section>
+
+    <section id="projects" class="card">
+      <h3 class="section-title">Projects</h3>
+      <div class="grid">
+        <div class="project card">
+          <h4>QSAR‑Kit</h4>
+          <p class="muted">Bộ công cụ huấn luyện QSAR (Chemprop/RDKit), đánh giá chéo, và diễn giải.</p>
+          <p><a href="#">GitHub</a> • <a href="#">Demo</a></p>
+        </div>
+        <div class="project card">
+          <h4>DockFlow</h4>
+          <p class="muted">Workflow docking (AutoDock Vina/LeadIT), chuẩn hoá đầu vào, tái tạo cấu hình.</p>
+          <p><a href="#">GitHub</a> • <a href="#">Docs</a></p>
+        </div>
+        <div class="project card">
+          <h4>ADMET‑Screen</h4>
+          <p class="muted">Pipeline Chemprop/ADMET‑AI có bộ lọc Lipinski, HIA, BBB, hERG, DILI…</p>
+          <p><a href="#">GitHub</a></p>
+        </div>
+        <div class="project card">
+          <h4>MD‑Analyzer</h4>
+          <p class="muted">Bộ script GROMACS: RMSD/RMSF/Rg/SASA/MMPBSA + đồ thị tự động.</p>
+          <p><a href="#">GitHub</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="packages" class="card">
+      <h3 class="section-title">CADD packages</h3>
+      <div class="grid">
+        <div class="pkg card">
+          <h4>cadd‑utils</h4>
+          <p class="muted">Tiện ích RDKit/OBabel cho xử lý SMILES, chuẩn hoá, kiểm lỗi.</p>
+          <p><a href="#">PyPI</a> • <a href="#">Docs</a></p>
+        </div>
+        <div class="pkg card">
+          <h4>ph4‑miner</h4>
+          <p class="muted">Trích xuất/khai phá 3D‑pharmacophore từ tập cấu dạng.</p>
+          <p><a href="#">GitHub</a></p>
+        </div>
+        <div class="pkg card">
+          <h4>vina‑batch</h4>
+          <p class="muted">Chạy docking song song, sinh báo cáo HTML/CSV.</p>
+          <p><a href="#">GitHub</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="cv" class="card">
+      <h3 class="section-title">CV</h3>
+      <p>Tải CV dạng PDF tại đây: <a href="cv.pdf" download>cv.pdf</a> (đặt file <code>cv.pdf</code> cùng thư mục với <code>index.html</code>).</p>
+    </section>
+
+    <div class="footer">
+      <div>© <span id="year"></span> Tên của bạn. Thiết kế tối giản, lấy cảm hứng từ AcademicPages.</div>
+      <div><a href="#">Sitemap</a></div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      const root = document.documentElement;
+      const saved = localStorage.getItem('theme');
+      if(saved === 'light'){ root.classList.add('light'); }
+      document.getElementById('theme').addEventListener('click', ()=>{
+        root.classList.toggle('light');
+        localStorage.setItem('theme', root.classList.contains('light') ? 'light' : 'dark');
+      });
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
