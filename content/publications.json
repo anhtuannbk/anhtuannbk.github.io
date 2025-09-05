@@ -1,0 +1,210 @@
+[
+  {
+    "year": 2025,
+    "type": "journal",
+    "title": "Zoanthamine-Type Alkaloids Derived from Cultured Zoanthus kuroshio with Therapeutic Potential Against Osteoporosis",
+    "authors": [
+      "Ngoc-Thac Pham",
+      "Bo-Rong Peng",
+      "Huong-Giang Le",
+      "You-Song Cheng",
+      "Yun-Shiuan Chen",
+      "Thanh Hao Huynh",
+      "Lo-Yun Chen",
+      "Le Anh Tuan Nguyen",
+      "Dang T. Nguyen",
+      "Yu-Chia Chang",
+      "Jui-Hsin Su",
+      "Mohamed El-Shazly",
+      "Mei-Hsien Lee",
+      "Kuei-Hung Lai"
+    ],
+    "journal": "Journal of Natural Products",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "doi": "10.1021/acs.jnatprod.5c00457",
+    "url": "https://doi.org/10.1021/acs.jnatprod.5c00457",
+    "language": "en"
+  },
+  {
+    "year": 2025,
+    "type": "journal",
+    "title": "Application of bioactive molecular networking to identify corneal-cytoprotective compounds from Dialium cochinchinense Pierre leaves",
+    "authors": [
+      "Thi Tuyet Nhung Nguyen",
+      "Yu-Chi Lin",
+      "Le-Anh-Tuan Nguyen",
+      "Chih-Hua Chao",
+      "Thanh-Hoa Vo",
+      "Su-Jung Hsu",
+      "Keng-Chang Tsai",
+      "Ching-Kuo Lee",
+      "Jing-Jy Cheng"
+    ],
+    "journal": "Current Plant Biology",
+    "volume": "42",
+    "issue": null,
+    "pages": "100489",
+    "doi": "10.1016/j.cpb.2025.100489",
+    "url": "https://doi.org/10.1016/j.cpb.2025.100489",
+    "language": "en",
+    "issn": "2214-6628"
+  },
+  {
+    "year": 2025,
+    "type": "journal",
+    "title": "Nghiên cứu in silico tìm kiếm các hợp chất ức chế acid cạnh tranh kali trong điều trị loét dạ dày tá tràng",
+    "title_en": "In silico identification of potassium-competitive acid blocker candidates for peptic ulcer treatment",
+    "authors": [
+      "Nguyễn Lê Anh Tuấn",
+      "Nguyễn Thị Thùy Trang",
+      "Võ Lê Anh Thư"
+    ],
+    "journal": "Tạp chí Khoa học Lạc Hồng",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "doi": null,
+    "url": null,
+    "language": "vi"
+  },
+  {
+    "year": 2025,
+    "type": "journal",
+    "title": "Sàng lọc in silico các phân tử nhỏ có khả năng ức chế thụ thể AT1 để nghiên cứu phát triển thuốc điều trị bệnh tăng huyết áp",
+    "title_en": "In silico screening of small molecules as AT1 receptor inhibitors for antihypertensive drug development",
+    "authors": [
+      "Nguyễn Lê Anh Tuấn",
+      "Võ Lê Anh Thư",
+      "Đào Chí Tuyên"
+    ],
+    "journal": "Vietnam Journal of Science and Technology (Series B)",
+    "volume": "67",
+    "issue": "2",
+    "pages": "53-60",
+    "doi": "10.31276/VJST.67(2).53-60",
+    "url": "https://doi.org/10.31276/VJST.67(2).53-60",
+    "language": "vi",
+    "note": "Corresponding author (*)"
+  },
+  {
+    "year": 2024,
+    "type": "journal",
+    "title": "Sàng lọc in silico các phân tử nhỏ có khả năng ức chế men chuyển angiotensin",
+    "title_en": "In silico screening of small molecules as angiotensin-converting enzyme inhibitors",
+    "authors": [
+      "Nguyễn Lê Anh Tuấn",
+      "Trịnh Thị Hồng Hoa",
+      "Võ Lê Anh Thư"
+    ],
+    "journal": "Tạp chí Khoa học Lạc Hồng",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "doi": null,
+    "url": null,
+    "language": "vi"
+  },
+  {
+    "year": 2023,
+    "type": "conference",
+    "title": "Discovery of natural interleukin 36γ small molecule inhibitors by pharmacophore screening, docking analysis, ADMET prediction, and molecular dynamics simulations",
+    "authors": [
+      "Tuan Le-Anh Nguyen",
+      "Thu Le-Anh Vo"
+    ],
+    "journal": "AsiaPharm V",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "doi": null,
+    "url": null,
+    "language": "en"
+  },
+  {
+    "year": 2021,
+    "type": "journal",
+    "title": "Sàng lọc in silico các phân tử nhỏ có khả năng ức chế hoạt tính interleukin-36γ",
+    "title_en": "In silico screening of small molecules as interleukin-36γ activity inhibitors",
+    "authors": [
+      "Trịnh Tiến Phát",
+      "Nguyễn Lê Anh Tuấn"
+    ],
+    "journal": "Tạp chí Khoa học Lạc Hồng",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "doi": null,
+    "url": null,
+    "language": "vi"
+  },
+  {
+    "year": 2020,
+    "type": "journal",
+    "title": "Sàng lọc in silico các cấu trúc phân tử nhỏ ức chế hoạt tính interleukin-17A trong điều trị các bệnh tự miễn",
+    "title_en": "In silico screening of small molecules inhibiting interleukin-17A activity for autoimmune disease treatment",
+    "authors": [
+      "Nguyễn Lê Anh Tuấn",
+      "Hoàng Viết Nhâm",
+      "Mai Thành Tấn",
+      "Bùi Thị Hoàng Linh",
+      "Võ Nguyễn Quỳnh Hương",
+      "Nguyễn Ngọc Lê",
+      "Thái Khắc Minh",
+      "Trần Thành Đạo",
+      "Lê Minh Trí"
+    ],
+    "journal": "Tạp chí Y Dược học",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "doi": null,
+    "url": null,
+    "language": "vi"
+  },
+  {
+    "year": 2019,
+    "type": "journal",
+    "title": "Nghiên cứu xây dựng mô hình QSAR nhị phân và Pharmacophore trên các chất ức chế cytochrom P450 CYP2D6",
+    "title_en": "Development of binary QSAR models and a pharmacophore for cytochrome P450 CYP2D6 inhibitors",
+    "authors": [
+      "Trần Thành Đạo",
+      "Lê Minh Trí",
+      "Lại Hồng Hạnh",
+      "Hoàng Viết Nhâm",
+      "Nguyễn Lê Anh Tuấn",
+      "Mai Thành Tấn",
+      "Phạm Toàn Quyền",
+      "Thái Khắc Minh"
+    ],
+    "journal": "Tạp chí Dược học",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "doi": null,
+    "url": null,
+    "language": "vi"
+  },
+  {
+    "year": 2018,
+    "type": "conference",
+    "title": "Efflux pump inhibitors approach to combat multidrug resistant bacteria",
+    "authors": [
+      "Khac-Minh Thai",
+      "Trieu-Du Ngo",
+      "Hong-Hanh Lai",
+      "Viet-Nham Hoang",
+      "Le-Anh-Tuan Nguyen",
+      "Thanh-Dao Tran",
+      "Minh-Tri Le"
+    ],
+    "journal": "The 1st International Conference on Microbiology and One Health",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "doi": null,
+    "url": null,
+    "language": "en"
+  }
+]
