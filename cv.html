@@ -10,19 +10,38 @@
       --bg:#0b0d10;--card:#12161b;--muted:#9aa4b2;--text:#e6edf3;
       --brand:#3ba9ff;--border:#1f2937;
     }
-    body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:var(--text);}
+    /* >>> Theme light: cần có để nút 🌗 hoạt động */
+    :root.light{
+      --bg:#f7fafc;
+      --card:#ffffff;
+      --muted:#4b5563;
+      --text:#111827;
+      --brand:#2563eb;
+      --border:#e5e7eb;
+    }
+
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;background:var(--bg);color:var(--text)}
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
     .container{max-width:1000px;margin:0 auto;padding:24px}
-    header.site{position:sticky;top:0;z-index:50;background: var(--bg);border-bottom:1px solid var(--border)}
+
+    /* Header cuộn theo trang (không sticky) */
+    header.site{
+      position: static; /* <- quan trọng: không sticky/fixed */
+      background: var(--bg);
+      border-bottom:1px solid var(--border)
+    }
     .nav{display:flex;justify-content:space-between;align-items:center;gap:18px}
     .brand{display:flex;align-items:center;gap:14px}
     .brand img{width:80px;height:80px;border-radius:50%;border:2px solid var(--border)}
     .links{display:flex;gap:16px;flex-wrap:wrap}
+    .toggle{border:1px solid var(--border);background:var(--card);color:var(--text);padding:6px 10px;border-radius:10px;cursor:pointer}
+
     .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:24px}
     h2{margin-top:20px}
     ul{padding-left:20px}
     .list{display:flex;flex-direction:column;gap:10px}
+
     .pub{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px}
     .pub .meta{font-size:12px;color:var(--muted);margin-bottom:4px}
     .muted{color:var(--muted);font-size:13px}
@@ -33,20 +52,20 @@
 <header class="site">
   <div class="container nav">
     <div class="brand">
-      <img src="avatar.jpg" alt="Avatar">
+      <img src="avatar.jpg" alt="Avatar" onerror="this.style.display='none'">
       <div>
         <h1>Le Anh Tuan Nguyen</h1>
         <p class="muted">Bien Hoa, Dong Nai, Vietnam</p>
       </div>
     </div>
-    <nav class="links">
+    <nav class="links" role="navigation">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="publications.html">Publications</a>
       <a href="teaching.html">Teaching</a>
       <a href="lab.html">Lab</a>
       <a href="activities.html">Activities</a>
-      <a href="cv.html">CV</a>
+      <a href="cv.html" aria-current="page">CV</a>
       <button id="theme" class="toggle" aria-label="Toggle theme">🌗</button>
     </nav>
   </div>
@@ -103,14 +122,15 @@
 <div class="footer container">
   <div>© <span id="year"></span> Le Anh Tuan Nguyen</div>
   <div>
-    <a href="https://scholar.google.se/citations?user=5pSwJhgAAAAJ&hl=en" target="_blank">Scholar</a> ·
-    <a href="https://orcid.org/0000-0002-2451-7579" target="_blank">ORCID</a> ·
-    <a href="https://www.researchgate.net/profile/Tuan-Nguyen-587" target="_blank">ResearchGate</a>
+    <a href="https://scholar.google.se/citations?user=5pSwJhgAAAAJ&hl=en" target="_blank" rel="noopener">Scholar</a> ·
+    <a href="https://orcid.org/0000-0002-2451-7579" target="_blank" rel="noopener">ORCID</a> ·
+    <a href="https://www.researchgate.net/profile/Tuan-Nguyen-587" target="_blank" rel="noopener">ResearchGate</a>
   </div>
 </div>
 
 <script>
 (function(){
+  // Theme init & toggle
   const root = document.documentElement;
   const saved = localStorage.getItem('theme');
   if(saved === 'light'){ root.classList.add('light'); }
@@ -121,33 +141,55 @@
       localStorage.setItem('theme', root.classList.contains('light') ? 'light' : 'dark');
     });
   }
-  document.getElementById("year").textContent = new Date().getFullYear();
 
-  fetch("content/publications.json")
-    .then(r => r.json())
+  // Year
+  const y = document.getElementById('year');
+  if(y){ y.textContent = new Date().getFullYear(); }
+
+  // Utilities
+  const esc = s => (s||"").toString().replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const fmtVenue = p => {
+    const parts = [];
+    if(p.journal) parts.push(p.journal);
+    const volIss = [p.volume, p.issue ? `(${p.issue})` : null].filter(Boolean).join('');
+    if(volIss) parts.push(volIss);
+    if(p.pages) parts.push(p.pages);
+    return parts.join(', ');
+  };
+
+  // Load publications from JSON (relative to site root)
+  fetch("content/publications.json", {cache: "no-store"})
+    .then(r => {
+      if(!r.ok) throw new Error("Cannot load publications.json");
+      return r.json();
+    })
     .then(data => {
-      const container = document.getElementById("publist");
-      container.innerHTML = data.map(pub => {
-        const year = pub.year || "";
-        const type = pub.type || "";
-        const titleMain = pub.title_en || pub.title;
-        const titleSub = pub.title_en && pub.language === "vi"
-          ? `<div class="muted">Original [VI]: <i>${pub.title}</i></div>` : "";
-        const authors = (pub.authors || []).join(", ");
-        const venue = [pub.journal, pub.volume, pub.issue, pub.pages].filter(Boolean).join(", ");
-        const doiLink = pub.doi ? `DOI: <a href="https://doi.org/${pub.doi}" target="_blank">${pub.doi}</a>` : "";
+      // sort by year desc
+      data.sort((a,b) => (b.year||0) - (a.year||0));
+      const html = data.map(p => {
+        const year = p.year || '';
+        const type = p.type || '';
+        const titleMain = esc(p.title_en || p.title || 'Untitled');
+        const showVI = p.title_en && (p.language||'').toLowerCase().startsWith('vi');
+        const titleSub = showVI ? `<div class="muted">Original [VI]: <i>${esc(p.title)}</i></div>` : '';
+        const authors = (p.authors||[]).map(esc).join(', ');
+        const venue = esc(fmtVenue(p));
+        const doiLink = p.doi ? ` DOI: <a href="https://doi.org/${encodeURIComponent(p.doi)}" target="_blank" rel="noopener">${esc(p.doi)}</a>` : (p.url ? ` <a href="${esc(p.url)}" target="_blank" rel="noopener">link</a>` : '');
         return `
           <article class="pub">
-            <div class="meta">${year} · ${type}</div>
+            <div class="meta">${esc(year)} · ${esc(type)}</div>
             <p><b>${titleMain}</b>${titleSub}<br/>
-            ${authors}. ${venue}. ${doiLink}</p>
+            ${authors}${authors && (venue||doiLink) ? '. ' : ''}${venue}${venue && doiLink ? '. ' : ''}${doiLink}</p>
           </article>`;
-      }).join("");
+      }).join(""); // không dùng "\n" để tránh hiện ký tự lạ
+      document.getElementById("publist").innerHTML = html || '<p class="muted">No publications found.</p>';
     })
     .catch(err => {
-      document.getElementById("publist").innerHTML = "Failed to load publications.";
       console.error(err);
+      document.getElementById("publist").innerHTML =
+        'Failed to load <code>content/publications.json</code>. Make sure this file exists in the site root.';
     });
+})();
 </script>
 
 </body>
