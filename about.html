@@ -8,62 +8,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-:root{
-  --bg: #0b0d10;
-  --card: #12161b;
-  --muted: #9aa4b2;
-  --text: #e6edf3;
-  --brand: #3ba9ff;
-  --accent: #61d095;
-  --border: #1f2937;
-}
-:root.light{
-  --bg: #f7fafc;
-  --card: #ffffff;
-  --muted: #4b5563;
-  --text: #111827;
-  --brand: #2563eb;
-  --accent: #0ea5e9;
-  --border: #e5e7eb;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;background:var(--bg);color:var(--text)}
-a{color:var(--brand);text-decoration:none}
-a:hover{opacity:.9;text-decoration:underline}
+:root{--bg:#0b0d10;--card:#12161b;--muted:#9aa4b2;--text:#e6edf3;--brand:#3ba9ff;--accent:#61d095;--border:#1f2937}
+:root.light{--bg:#f7fafc;--card:#fff;--muted:#4b5563;--text:#111827;--brand:#2563eb;--accent:#0ea5e9;--border:#e5e7eb}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline;opacity:.9}
 .container{max-width:1100px;margin:0 auto;padding:24px}
-header.site{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur(8px);background:color-mix(in oklab, var(--bg), transparent 35%);border-bottom:1px solid var(--border)}
-.container.nav{position:relative}
-.nav{display:flex;gap:18px;align-items:center;justify-content:space-between}
-.brand{display:flex;gap:14px;align-items:center}
-.brand img{width:96px;height:96px;border-radius:50%;border:2px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,.15)}
-.brand h1{font-size:22px;line-height:1.1;margin:0;font-weight:800}
-.brand p{margin:3px 0 0 0;font-size:13px;color:var(--muted)}
-.links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-.links a{font-weight:600}
-.toggle{border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer}
-.hamburger{display:none;border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer;font-size:18px;line-height:1}
+header.site{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur(8px);background:rgba(11,13,16,.65);border-bottom:1px solid var(--border)}
+.container.nav{position:relative}.nav{display:flex;gap:18px;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:14px;align-items:center}.brand img{width:96px;height:96px;border-radius:50%;border:2px solid var(--border)}
+.brand h1{font-size:22px;margin:0;font-weight:800}.brand p{margin:3px 0 0 0;font-size:13px;color:var(--muted)}
+.links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.links a{font-weight:600}
+.toggle,.hamburger{border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer}
+.hamburger{display:none;font-size:18px;line-height:1}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,.12)}
-.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:28px 0}
-.muted{color:var(--muted)}
-.section-title{font-size:18px;font-weight:800;letter-spacing:.02em;margin:0 0 14px 0;text-transform:uppercase;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-.pub{grid-column:span 12;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
-.pub .meta{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.muted{color:var(--muted)}.section-title{font-size:18px;font-weight:800;margin:0 0 14px 0;text-transform:uppercase;color:var(--muted)}
+.pub{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}.pub .meta{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
 .pill{display:inline-block;border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
-.list{display:flex;flex-direction:column;gap:12px}
-.footer{margin:40px auto 20px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
-@media (max-width: 900px){
-  .hamburger{display:inline-flex;align-items:center;justify-content:center}
-  .links{
-    display:none;position:absolute;right:24px;top:72px;background:var(--card);
-    border:1px solid var(--border);border-radius:12px;padding:12px;flex-direction:column;gap:8px;
-    width:min(80vw,320px);box-shadow:0 8px 24px rgba(0,0,0,.18)
-  }
-  .links a, .links .toggle{width:100%;text-align:left}
-  .links.open{display:flex}
-  .brand p{display:none}
-}
+.badge{display:inline-block;margin-left:6px;padding:2px 6px;border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--muted)}
+.list{display:flex;flex-direction:column;gap:12px}.footer{margin:40px auto 20px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
+@media (max-width:900px){.hamburger{display:inline-flex}.links{display:none;position:absolute;right:24px;top:72px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;flex-direction:column;gap:8px;width:min(80vw,320px)}.links.open{display:flex}.brand p{display:none}}
 </style>
 </head>
 <body>
@@ -83,7 +46,8 @@ header.site{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur
       <a href="about.html">About</a>
       <a href="publications.html">Publications</a>
       <a href="teaching.html">Teaching</a>
-      <a href="mylab.html">My Lab</a>
+      <a href="lab.html">Lab</a>
+      <a href="activities.html">Activities</a>
       <a href="cv.html">CV</a>
       <button id="theme" class="toggle" aria-label="Toggle theme">🌗</button>
     </nav>
@@ -94,25 +58,13 @@ header.site{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur
     
 <section class="card">
   <h3 class="section-title">About me</h3>
-  <p>
-    I am a lecturer at the Faculty of Pharmacy, Lac Hong University. My research applies computer-aided drug design (CADD) and cheminformatics
-    to accelerate the discovery of new therapeutic candidates. I focus on 3D pharmacophore modeling, machine learning, molecular docking,
-    ADMET prediction, molecular dynamics simulations, and binding free energy calculations (MM/GBSA and MM/PBSA). I am also interested in integrating
-    machine learning to improve predictive performance and automate compound screening pipelines. This site highlights my publications, research activities,
-    and computational tools developed for both research and teaching.
+  <p class="muted">
+    I am a lecturer at the Faculty of Pharmacy, Lac Hong University. My research focuses on applying information technology to accelerate drug discovery, with expertise in ADMET prediction, 3D pharmacophore modeling, machine learning, molecular docking, and molecular dynamics simulations.
   </p>
-  <h4>Research interests</h4>
-  <ul class="list">
-    <li>3D pharmacophore modeling for virtual screening.</li>
-    <li>Machine learning models for bioactivity and ADMET prediction.</li>
-    <li>Structure-based approaches including molecular docking.</li>
-    <li>Molecular dynamics simulations for protein–ligand complexes.</li>
-    <li>Binding free energy estimation using MM/GBSA and MM/PBSA.</li>
-  </ul>
-  <h4>Profiles</h4>
   <div class="list">
     <a href="https://scholar.google.se/citations?user=5pSwJhgAAAAJ&hl=en&oi=sra" target="_blank" rel="noopener">📚 Google Scholar</a>
     <a href="https://orcid.org/0000-0002-2451-7579" target="_blank" rel="noopener">🧬 ORCID</a>
+    <a href="https://www.researchgate.net/profile/Tuan-Nguyen-587" target="_blank" rel="noopener">🔬 ResearchGate</a>
   </div>
 </section>
 
@@ -124,6 +76,7 @@ header.site{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur
 
   </main>
   
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
 (function(){
   const root = document.documentElement;
@@ -156,5 +109,6 @@ header.site{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur
 })();
 </script>
 
+  
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Publications — Le Anh Tuan Nguyen</title>
+  <title>Lab — Le Anh Tuan Nguyen</title>
   <meta name="description" content="Academic profile of Le Anh Tuan Nguyen — CADD, ADMET, docking, MD, MM/GBSA, MM/PBSA." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -57,9 +57,12 @@ header.site{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur
   <main class="container">
     
 <section class="card">
-  <h3 class="section-title">Publications</h3>
-  <div id="pubs" class="list"></div>
-  <noscript>Please enable JavaScript to load publications from JSON.</noscript>
+  <h3 class="section-title">Lab</h3>
+  <p>
+    We apply cheminformatics and CADD to identify potential therapeutic candidates. The lab welcomes motivated students interested in
+    ADMET prediction, 3D pharmacophore modeling, molecular docking, molecular dynamics simulations, and binding free energy analyses (MM/GBSA, MM/PBSA).
+  </p>
+  <p>(You can add recruitment info, member list, and project highlights here.)</p>
 </section>
 
     
@@ -104,74 +107,5 @@ header.site{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur
 </script>
 
   
-<script>
-(async function(){  
-  const jsonUrl = "content/publications.json";
-  const container = document.getElementById('pubs');
-  if(!container) return;
-
-  function esc(s){return (s||"").toString().replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
-
-  function fmtAuthors(arr){ return arr.join(", "); }
-  function fmtVenue(p){ 
-    const parts = [];
-    if(p.journal) parts.push(p.journal);
-    if(p.volume) parts.push(p.volume + (p.issue ? '('+p.issue+')' : ''));
-    if(p.pages) parts.push(p.pages);
-    return parts.join(', ');
-  }
-
-  async function enrichByDOI(p){ 
-    if(!p.doi || p.journal) return p;
-    try{ 
-      const res = await fetch("https://api.crossref.org/works/" + encodeURIComponent(p.doi));
-      if(!res.ok) return p;
-      const j = await res.json();
-      const it = j.message;
-      p.journal = (it['container-title'] && it['container-title'][0]) || p.journal || null;
-      p.volume = it.volume || p.volume || null;
-      p.issue  = it.issue || p.issue || null;
-      if(it.page) p.pages = it.page;
-      if(it.author && (!p.authors || p.authors.length===0)) {
-        p.authors = it.author.map(a=>[a.given,a.family].filter(Boolean).join(' '));
-      }
-      if(!p.title || p.title.length===0) p.title = (it.title && it.title[0]) || p.title;
-      if(!p.url && it.DOI) p.url = "https://doi.org/" + it.DOI;
-    }catch(e){ console.warn('Crossref error', e); }
-    return p;
-  }
-
-  try{
-    const r = await fetch(jsonUrl);
-    const data = await r.json();
-    data.sort((a,b)=> (b.year||0) - (a.year||0));
-    for(let i=0;i<data.length;i++){ data[i] = await enrichByDOI(data[i]); }
-
-    const html = data.map(p=>{
-      const year = p.year || '—';
-      const type = p.type || 'work';
-      const doiLink = p.doi ? `<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener">doi:${p.doi}</a>` : (p.url ? `<a href="${p.url}" target="_blank" rel="noopener">link</a>` : '');
-      const authors = p.authors && p.authors.length ? esc(fmtAuthors(p.authors)) : '';
-      const venue = fmtVenue(p);
-      const isVI = (p.language||'').toLowerCase().startsWith('vi');
-      const titleMain = esc(p.title_en || p.title || 'Untitled');
-      const titleSub  = p.title && (p.title_en || isVI) ? `<div class="muted" style="margin-top:4px;">${esc(p.title)} <span class="badge">VI</span></div>` : '';
-
-      return `
-      <article class="pub">
-        <div class="meta"><span class="pill">${year}</span><span class="pill">${type}</span></div>
-        <p><b>${titleMain}</b>${titleSub}<br/>
-        ${authors}${authors && (venue||doiLink) ? '. ' : ''}${esc(venue)}${venue && doiLink ? '. ' : ''}${doiLink}</p>
-      </article>`;
-    }).join("\\n");
-
-    container.innerHTML = html || '<p class="muted">No publications found.</p>';
-  }catch(e){
-    console.error(e);
-    container.innerHTML = '<p class="muted">Could not load publications.json. Please add it under <code>content/publications.json</code>.</p>';
-  }
-})();
-</script>
-
 </body>
 </html>
