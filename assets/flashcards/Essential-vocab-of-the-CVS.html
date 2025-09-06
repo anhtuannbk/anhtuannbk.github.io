@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essential vocab of the CVS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Cấu hình Tailwind CSS
+        tailwind.config = {"theme":{"extend":{"colors":{"primary":"#007AFF","secondary":"#34C759","accent":"#FF9500","destructive":"#FF3B30","macos_bg_light":"#F6F6F6","macos_bg_dark":"#2D2D2D","macos_secondary_bg_light":"#FFFFFF","macos_secondary_bg_dark":"#3C3C3C","macos_tertiary_bg_light":"#EFEFEF","macos_tertiary_bg_dark":"#232323","macos_label_light":"#000000","macos_label_dark":"#FFFFFF","macos_secondary_label_light":"rgba(60, 60, 67, 0.6)","macos_secondary_label_dark":"rgba(235, 235, 245, 0.6)","macos_separator_light":"rgba(60, 60, 67, 0.15)","macos_separator_dark":"rgba(84, 84, 88, 0.4)","macos_placeholder_light":"rgba(60, 60, 67, 0.3)","macos_placeholder_dark":"rgba(235, 235, 245, 0.3)","macos_control_bg_light":"#FFFFFF","macos_control_bg_dark":"#5A5A5A","macos_control_border_light":"#CCCCCC","macos_control_border_dark":"#4A4A4A"}}},"darkMode":"class"}
+    </script>
+    <style>
+        /* CSS cho hiệu ứng lật thẻ */
+        .flashcard-perspective {
+            perspective: 1000px;
+        }
+        #flashcard-inner.is-flipped {
+            transform: rotateY(180deg);
+        }
+        /* Đảm bảo các nút có thể nhấp được */
+        .standalone-actions button {
+            pointer-events: auto !important;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 bg-macos_bg_light dark:bg-macos_bg_dark text-macos_label_light dark:text-macos_label_dark font-sans">
+    <h1 class="text-3xl font-bold text-center mb-6">Thẻ Ghi Nhớ Thuật Ngữ Y Khoa</h1>
+    <div id="standalone-activity" class="max-w-4xl mx-auto bg-macos_secondary_bg_light dark:bg-macos_secondary_bg_dark p-4 sm:p-6 rounded-lg shadow-lg">
+        
+        <div class="flashcard-container p-4 bg-macos_tertiary_bg_light dark:bg-macos_tertiary_bg_dark rounded-lg border border-macos_separator_light dark:border-macos_separator_dark flex flex-col items-center gap-4">
+
+            <!-- Wrapper cho hiệu ứng 3D -->
+            <div class="flashcard-perspective w-full aspect-[3/2] sm:w-4/5 md:w-3/4 lg:w-2/3">
+                <!-- Phần tử xoay -->
+                <div id="flashcard-inner" class="relative w-full h-full text-center transition-transform duration-700 ease-in-out cursor-pointer" style="transform-style: preserve-3d;">
+
+                    <!-- Mặt trước -->
+                    <div id="flashcard-front" class="flashcard-face absolute w-full h-full flex items-center justify-center p-6 bg-macos_secondary_bg_light dark:bg-macos_tertiary_bg_dark rounded-xl shadow-md border border-macos_separator_light dark:border-macos_separator_dark" style="backface-visibility: hidden;">
+                        <div class="flashcard-text text-lg sm:text-xl md:text-2xl font-medium" aria-live="polite">
+                            Đang tải...
+                        </div>
+                    </div>
+
+                    <!-- Mặt sau -->
+                    <div id="flashcard-back" class="flashcard-face absolute w-full h-full flex items-center justify-center p-6 bg-macos_secondary_bg_light dark:bg-macos_tertiary_bg_dark rounded-xl shadow-md border border-macos_separator_light dark:border-macos_separator_dark" style="backface-visibility: hidden; transform: rotateY(180deg);">
+                         <div class="flashcard-text text-lg sm:text-xl md:text-2xl font-medium" aria-live="polite">
+                             Đang tải...
+                         </div>
+                    </div>
+
+                </div> <!-- Kết thúc #flashcard-inner -->
+            </div> <!-- Kết thúc .flashcard-perspective -->
+
+
+            <!-- Khu vực điều khiển -->
+            <div class="flashcard-controls w-full flex justify-between items-center pt-4 mt-4 border-t border-macos_separator_light dark:border-macos_separator_dark">
+                <button id="flashcard-prev-btn" class="px-4 py-2 text-base bg-white dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 rounded-lg border border-gray-300 dark:border-gray-500 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors" aria-label="Thẻ trước">
+                    &lt; Trước
+                </button>
+                <span id="flashcard-status" class="text-base font-medium text-macos_secondary_label_light dark:text-macos_secondary_label_dark">
+                    Thẻ ? / ?
+                </span>
+                <button id="flashcard-next-btn" class="px-4 py-2 text-base bg-white dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 rounded-lg border border-gray-300 dark:border-gray-500 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors" aria-label="Thẻ kế tiếp">
+                    Sau &gt;
+                </button>
+            </div>
+             <!-- Nút Lật Thẻ -->
+             <button id="flashcard-flip-btn" class="mt-4 w-full sm:w-auto px-6 py-2.5 text-base font-semibold text-white bg-primary hover:bg-blue-600 rounded-lg shadow-md transition-transform transform hover:scale-105">Lật Thẻ</button>
+
+        </div>
+    
+    </div>
+
+    <script type="module">
+    // --- Logic chính của ứng dụng Thẻ Ghi Nhớ ---
+
+    /**
+     * Thêm tương tác: hiển thị thẻ, xử lý lật và điều hướng.
+     * @param {HTMLElement} activityElement - Phần tử chứa HTML của hoạt động.
+     * @param {object} state - Đối tượng trạng thái chứa `state.cards`.
+     */
+    function addInteractivity(activityElement, state) {
+        if (!activityElement || !state || !state.cards || state.cards.length === 0) {
+            console.warn("FlashCards: Không thể thêm tương tác - thiếu phần tử hoặc dữ liệu thẻ.");
+            return;
+        }
+
+        const cards = state.cards;
+        let currentCardIndex = 0;
+
+        // Lấy tham chiếu đến các phần tử UI
+        const cardInner = activityElement.querySelector('#flashcard-inner');
+        const frontFaceContent = activityElement.querySelector('#flashcard-front .flashcard-text');
+        const backFaceContent = activityElement.querySelector('#flashcard-back .flashcard-text');
+        const prevButton = activityElement.querySelector('#flashcard-prev-btn');
+        const nextButton = activityElement.querySelector('#flashcard-next-btn');
+        const statusDisplay = activityElement.querySelector('#flashcard-status');
+        const flipButton = activityElement.querySelector('#flashcard-flip-btn');
+
+        if (!cardInner || !frontFaceContent || !backFaceContent || !prevButton || !nextButton || !statusDisplay || !flipButton) {
+            console.error("FlashCards: Lỗi cài đặt tương tác - thiếu các phần tử cốt lõi.");
+            return;
+        }
+        
+        // Hàm cập nhật văn bản trạng thái
+        function updateStatus() {
+            if (!statusDisplay) return;
+            const isFlipped = cardInner.classList.contains('is-flipped');
+            statusDisplay.textContent = `Thẻ ${currentCardIndex + 1} / ${cards.length} - ${isFlipped ? 'Mặt sau' : 'Mặt trước'}`;
+        }
+
+        // Hàm hiển thị nội dung của một thẻ cụ thể
+        function displayCardContent(index) {
+            if (index < 0 || index >= cards.length) return; // Chỉ số ngoài phạm vi
+
+            const card = cards[index];
+            currentCardIndex = index;
+
+            // Cập nhật nội dung văn bản trên cả hai mặt
+            frontFaceContent.textContent = card.front;
+            backFaceContent.textContent = card.back;
+            
+            // Luôn quay về mặt trước khi chuyển thẻ
+            cardInner.classList.remove('is-flipped');
+
+            updateStatus();
+
+            // Cập nhật trạng thái các nút điều hướng
+            prevButton.disabled = (index === 0);
+            nextButton.disabled = (index === cards.length - 1);
+        }
+
+        // Hàm xử lý việc lật thẻ
+        function flipCard() {
+            if (!cardInner) return;
+            cardInner.classList.toggle('is-flipped');
+            updateStatus();
+        }
+        
+        // --- Gán các sự kiện ---
+        flipButton.addEventListener('click', flipCard);
+        // Cho phép nhấp vào chính thẻ để lật
+        cardInner.addEventListener('click', flipCard);
+
+        prevButton.addEventListener('click', (e) => {
+            e.stopPropagation(); // Ngăn việc lật thẻ khi nhấp vào nút
+            displayCardContent(currentCardIndex - 1);
+        });
+
+        nextButton.addEventListener('click', (e) => {
+            e.stopPropagation(); // Ngăn việc lật thẻ khi nhấp vào nút
+            displayCardContent(currentCardIndex + 1);
+        });
+
+        // Điều hướng bằng bàn phím
+        document.addEventListener('keydown', (e) => {
+             const isInputFocused = document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA';
+             if (isInputFocused) return;
+
+            if (e.key === 'ArrowLeft' && !prevButton.disabled) {
+                 displayCardContent(currentCardIndex - 1);
+            } else if (e.key === 'ArrowRight' && !nextButton.disabled) {
+                 displayCardContent(currentCardIndex + 1);
+            } else if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault(); // Ngăn phím cách cuộn trang
+                flipCard();
+            }
+         });
+
+        // Hiển thị ban đầu
+        displayCardContent(0);
+    }
+    
+    // --- Logic khởi tạo ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const activityHostElement = document.getElementById('standalone-activity');
+        let state = null;
+
+        if (!activityHostElement) { console.error("Không tìm thấy phần tử gốc của hoạt động."); return; }
+        
+        try {
+            // Dữ liệu cho các thẻ ghi nhớ
+            state = JSON.parse(`{"cards":[{"id":0,"front":"Essential / Secondary hypertension","back":"Tăng huyết áp nguyên phát / thứ phát"},{"id":1,"front":"Hypertensive crisis","back":"Tăng huyết áp cấp / Cơn tăng huyết áp"},{"id":2,"front":"Hypertensive emergency","back":"Tăng huyết áp cấp cứu"},{"id":3,"front":"Hypertensive urgency","back":"Tăng huyết áp khẩn cấp"},{"id":4,"front":"Atherosclerosis","back":"Xơ vữa động mạch"},{"id":5,"front":"Plaque","back":"Mảng xơ vữa"},{"id":6,"front":"Ischemic heart disease","back":"Bệnh tim thiếu máu cục bộ"},{"id":7,"front":"Ischemia","back":"Thiếu máu cục bộ"},{"id":8,"front":"Angina","back":"Đau thắt ngực"},{"id":9,"front":"Bacterial endocarditis","back":"Viêm nội tâm mạc nhiễm khuẩn"},{"id":10,"front":"Arrhythmia","back":"Loạn nhịp tim"},{"id":11,"front":"Bradycardia / Tachycardia","back":"Nhịp tim chậm / nhanh"},{"id":12,"front":"Transient ischemic attack (TIA)","back":"Cơn thiếu máu não thoáng qua"},{"id":13,"front":"Cerebrovascular accident (CVA, stroke)","back":"Tai biến mạch máu não / Đột quỵ"},{"id":14,"front":"Anemia","back":"Thiếu máu"},{"id":15,"front":"Hyperlipidemia","back":"Tăng lipid máu"},{"id":16,"front":"Antihypertensive","back":"Thuốc hạ huyết áp"},{"id":17,"front":"Diuretic","back":"Thuốc lợi tiểu"},{"id":18,"front":"Antiarrhythmic","back":"Thuốc chống loạn nhịp"},{"id":19,"front":"Anticoagulant","back":"Thuốc chống đông"},{"id":20,"front":"Antiplatelet agents","back":"Thuốc chống kết tập tiểu cầu"},{"id":21,"front":"Thrombolytic","back":"Thuốc tiêu huyết khối"},{"id":22,"front":"Vasoconstrictor","back":"Thuốc co mạch"},{"id":23,"front":"Vasodilator","back":"Thuốc giãn mạch"},{"id":24,"front":"Chest pain (CP)","back":"Đau ngực"},{"id":25,"front":"Palpitation","back":"Hồi hộp, tim đập nhanh"},{"id":26,"front":"Light-headed","back":"Chóng mặt"},{"id":27,"front":"Shortness of breath (SOB)","back":"Khó thở"},{"id":28,"front":"Edema","back":"Phù"},{"id":29,"front":"Hypotension","back":"Hạ huyết áp"},{"id":30,"front":"Right / Left pulmonary artery","back":"Động mạch phổi phải / trái"},{"id":31,"front":"Superior/ Inferior vena cava","back":"Tĩnh mạch chủ trên/ dưới"},{"id":32,"front":"Pulmonary veins","back":"Tĩnh mạch phổi"},{"id":33,"front":"Right / Left atrium","back":"Tâm nhĩ phải / trái"},{"id":34,"front":"Right / Left ventricle","back":"Tâm thất phải / trái"},{"id":35,"front":"Aorta","back":"Động mạch chủ"},{"id":36,"front":"Pulmonic semilunar valve","back":"Van bán nguyệt phổi"},{"id":37,"front":"Aortic semilunar valve","back":"Van bán nguyệt động mạch chủ"},{"id":38,"front":"Mitral (bicuspid) valve","back":"Van hai lá"},{"id":39,"front":"Tricuspid valve","back":"Van ba lá"},{"id":40,"front":"Venule","back":"Tiểu tĩnh mạch"},{"id":41,"front":"Arteriole","back":"Tiểu động mạch"},{"id":42,"front":"Capillary","back":"Mao mạch"},{"id":43,"front":"Erythrocyte","back":"Hồng cầu"},{"id":44,"front":"Leukocyte","back":"Bạch cầu"},{"id":45,"front":"Thrombocyte","back":"Tiểu cầu"},{"id":46,"front":"angi/o","back":"mạch máu"},{"id":47,"front":"vascul/o","back":"mạch"},{"id":48,"front":"aort/o","back":"động mạch chủ"},{"id":49,"front":"arteri/o","back":"động mạch"},{"id":50,"front":"arteriol/o","back":"tiểu động mạch"},{"id":51,"front":"atri/o","back":"tâm nhĩ"},{"id":52,"front":"ather/o","back":"(mảng xơ) mỡ, chất béo"},{"id":53,"front":"cardi/o","back":"tim"},{"id":54,"front":"coron/o","back":"tim (thuộc về mạch vành)"},{"id":55,"front":"electr/o","back":"điện"},{"id":56,"front":"my/o","back":"cơ"},{"id":57,"front":"phleb/o","back":"tĩnh mạch"},{"id":58,"front":"ven/o","back":"tĩnh mạch"},{"id":59,"front":"scler/o","back":"xơ cứng"},{"id":60,"front":"sten/o","back":"hẹp"},{"id":61,"front":"thromb/o","back":"huyết khối"},{"id":62,"front":"valv/o","back":"van"},{"id":63,"front":"valvul/o","back":"van"},{"id":64,"front":"ventricul/o","back":"tâm thất"},{"id":65,"front":"brady-","back":"chậm"},{"id":66,"front":"endo-","back":"trong"},{"id":67,"front":"extra-","back":"ngoài"},{"id":68,"front":"peri-","back":"quanh"},{"id":69,"front":"trans-","back":"qua, xuyên"}]}`);
+        } catch (parseError) {
+            console.error("Lỗi phân tích JSON:", parseError);
+            activityHostElement.innerHTML = '<p class="text-red-500 text-center">Lỗi: Không thể tải dữ liệu thẻ.</p>';
+            return;
+        }
+        
+        if (!state) { 
+            console.error("Trạng thái là null sau khi phân tích.");
+            activityHostElement.innerHTML = '<p class="text-red-500 text-center">Lỗi: Dữ liệu thẻ trống.</p>';
+            return;
+        }
+
+        // Khởi tạo tương tác
+        try {
+            addInteractivity(activityHostElement, state);
+            console.log("Khởi tạo thành công.");
+        } catch (initError) {
+            console.error("Lỗi trong quá trình khởi tạo tương tác:", initError);
+            activityHostElement.innerHTML = '<p class="text-red-500 text-center">Lỗi: Không thể khởi tạo tương tác.</p>';
+        }
+    });
+    </script>
+
+</body>
+</html>
+
