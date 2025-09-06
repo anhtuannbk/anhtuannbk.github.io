@@ -103,38 +103,50 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
 })();
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
 (async function(){ 
-  // ====== CONFIG (GitHub Pages) ======
-  const user   = "anhtuannbk";              // GitHub username
-  const repo   = "anhtuannbk.github.io";    // Repository name
-  const branch = "main";                    // Branch
+  // ====== CONFIG ======
+  const user   = "anhtuannbk";              // <--- đổi nếu khác
+  const repo   = "anhtuannbk.github.io";    // <--- đổi nếu khác
+  const branch = "main";                    // <--- đổi nếu khác
   const hostApi = "https://api.github.com";
-  // ===================================
+  // ====================
 
   const container = document.getElementById('teach');
   if(!container) return;
 
+  function showError(msg){
+    container.innerHTML = `<div class="card" style="margin-top:16px;">
+      <h4 style="margin:0 0 8px 0;">Load error</h4>
+      <pre style="white-space:pre-wrap;color:#f87171">${msg}</pre>
+    </div>`;
+  }
+
   async function listCourses(){
     const url = `${hostApi}/repos/${user}/${repo}/contents/content/teaching?ref=${branch}`;
     const res = await fetch(url);
-    if(!res.ok) return [];
+    if(!res.ok) throw new Error(`listCourses HTTP ${res.status} — ${url}`);
     const arr = await res.json();
-    return arr.filter(x=>x.type==='dir').map(x=>x.name);
+    const dirs = arr.filter(x=>x.type==='dir').map(x=>x.name);
+    if(!dirs.length) console.warn("No course folders found under content/teaching/");
+    return dirs;
   }
 
   async function listFiles(courseName){
     const url = `${hostApi}/repos/${user}/${repo}/contents/content/teaching/${encodeURIComponent(courseName)}?ref=${branch}`;
     const res = await fetch(url);
-    if(!res.ok) return [];
+    if(!res.ok) throw new Error(`listFiles(${courseName}) HTTP ${res.status} — ${url}`);
     const arr = await res.json();
-    // Only Markdown files → they can contain links to any .html
-    return arr.filter(x=>x.type==='file' && /\.md$/i.test(x.name));
+    const files = arr.filter(x=>x.type==='file' && /\.md$/i.test(x.name));
+    if(!files.length) console.warn(`No .md in course "${courseName}"`);
+    return files;
   }
 
-  async function loadFile(rawUrl){
-    const res = await fetch(rawUrl);
-    if(!res.ok) return null;
+  async function loadRaw(courseName, fileName){
+    const raw = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/content/teaching/${encodeURIComponent(courseName)}/${encodeURIComponent(fileName)}`;
+    const res = await fetch(raw);
+    if(!res.ok) throw new Error(`loadRaw HTTP ${res.status} — ${raw}`);
     return await res.text();
   }
 
@@ -146,40 +158,53 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
       </section>`;
   }
 
-  const groups = await listCourses();
-  if(groups.length===0){
-    container.innerHTML = '<p class="muted">No courses yet. Create folders under <code>content/teaching/</code>.</p>';
-    return;
-  }
-
-  const sections = [];
-  for (const g of groups){
-    try{
-      const files = await listFiles(g);
-      if(files.length===0){
-        sections.push(sectionTpl(g, '<p class="muted">No posts yet for this course.</p>'));
-        continue;
-      }
-      // Sort newest-first by filename (e.g., 2025-09-10-...)
-      files.sort((a,b)=> b.name.localeCompare(a.name));
-
-      const posts = await Promise.all(files.map(async f=>{
-        const raw = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/content/teaching/${encodeURIComponent(g)}/${encodeURIComponent(f.name)}`;
-        const text = await loadFile(raw);
-        if(!text) return '';
-        const html = window.marked ? window.marked.parse(text) : `<pre>${text.replace(/[&<>]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]))}</pre>`;
-        return `<article class="pub"><div class="meta"><span class="pill">${g}</span><span class="pill">${f.name}</span></div>${html}</article>`;
-      }));
-
-      sections.push(sectionTpl(g, posts.join('
-')));
-    }catch(e){
-      console.error(e);
-      sections.push(sectionTpl(g, '<p class="muted">Cannot load this course now.</p>'));
+  try{
+    const courses = await listCourses();
+    if(!courses.length){
+      container.innerHTML = '<p class="muted">No courses yet. Create folders under <code>content/teaching/</code>.</p>';
+      return;
     }
+
+    const sections = [];
+    for (const course of courses){
+      try{
+        const files = await listFiles(course);
+        if(!files.length){
+          sections.push(sectionTpl(course, '<p class="muted">No posts yet for this course.</p>'));
+          continue;
+        }
+        files.sort((a,b)=> b.name.localeCompare(a.name));
+
+        const posts = await Promise.all(files.map(async f=>{
+          try{
+            const text = await loadRaw(course, f.name);
+            const html = window.marked ? window.marked.parse(text)
+              : `<pre>${text.replace(/[&<>]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]))}</pre>`;
+            return `<article class="pub">
+              <div class="meta"><span class="pill">${course}</span><span class="pill">${f.name}</span></div>
+              ${html}
+            </article>`;
+          }catch(e){
+            console.error(e);
+            return `<article class="pub">
+              <div class="meta"><span class="pill">${course}</span><span class="pill">${f.name}</span></div>
+              <p class="muted">Cannot load this post. Check raw URL & file name.</p>
+            </article>`;
+          }
+        }));
+
+        sections.push(sectionTpl(course, posts.join('\n')));
+      }catch(e){
+        console.error(e);
+        sections.push(sectionTpl(course, `<p class="muted">Cannot list files for this course. ${e.message}</p>`));
+      }
+    }
+
+    container.innerHTML = sections.join('\n');
+  }catch(e){
+    console.error(e);
+    showError(e.message);
   }
-  container.innerHTML = sections.join('
-');
 })();
 </script>
 
