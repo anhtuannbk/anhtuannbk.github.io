@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -27,6 +28,19 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
 .badge{display:inline-block;margin-left:6px;padding:2px 6px;border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--muted)}
 .list{display:flex;flex-direction:column;gap:12px}.footer{margin:40px auto 20px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
 @media (max-width:900px){.hamburger{display:inline-flex}.links{display:none;position:absolute;right:24px;top:72px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;flex-direction:column;gap:8px;width:min(80vw,320px)}.links.open{display:flex}.brand p{display:none}}
+
+/* === Responsive iframe for Teaching === */
+#teach iframe{
+  display:block;
+  width:100%;
+  max-width:100%;
+  border:1px solid var(--border);
+  border-radius:12px;
+  height:760px; /* desktop/tablet default */
+}
+@media (max-width: 480px){
+  #teach iframe{ height:560px; } /* small mobile */
+}
   </style>
 </head>
 <body>
@@ -103,15 +117,14 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
 })();
 </script>
 
-  
 <script>
 (async function(){ 
-  // ====== CONFIGURE YOUR REPO HERE ======
-  const user = "anhtuannbk";              // GitHub username
-  const repo = "anhtuannbk.github.io";    // Repository name
-  const branch = "main";                  // Branch
+  // ====== CONFIG (GitHub Pages) ======
+  const user   = "anhtuannbk";              // GitHub username
+  const repo   = "anhtuannbk.github.io";    // Repository name
+  const branch = "main";                    // Branch
   const hostApi = "https://api.github.com";
-  // ======================================
+  // ===================================
 
   const container = document.getElementById('teach');
   if(!container) return;
@@ -125,7 +138,7 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
   }
 
   async function listFiles(courseName){
-    const url = `${hostApi}/repos/${user}/${repo}/contents/content/teaching/${courseName}?ref=${branch}`;
+    const url = `${hostApi}/repos/${user}/${repo}/contents/content/teaching/${encodeURIComponent(courseName)}?ref=${branch}`;
     const res = await fetch(url);
     if(!res.ok) return [];
     const arr = await res.json();
@@ -164,7 +177,7 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
       files.sort((a,b)=> b.name.localeCompare(a.name));
 
       const posts = await Promise.all(files.map(async f=>{
-        const raw = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/content/teaching/${g}/${f.name}`;
+        const raw = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/content/teaching/${encodeURIComponent(g)}/${encodeURIComponent(f.name)}`;
         const text = await loadFile(raw);
         if(!text) return '';
         const html = window.marked ? window.marked.parse(text) : `<pre>${text.replace(/[&<>]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]))}</pre>`;
