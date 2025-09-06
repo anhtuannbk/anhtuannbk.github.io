@@ -8,44 +8,65 @@
   <style>
     :root{
       --bg:#0b0d10;--card:#12161b;--muted:#9aa4b2;--text:#e6edf3;
-      --brand:#3ba9ff;--border:#1f2937;
+      --brand:#3ba9ff;--accent:#61d095;--border:#1f2937;
     }
-    /* >>> Theme light: cần có để nút 🌗 hoạt động */
     :root.light{
-      --bg:#f7fafc;
-      --card:#ffffff;
-      --muted:#4b5563;
-      --text:#111827;
-      --brand:#2563eb;
-      --border:#e5e7eb;
+      --bg:#f7fafc;--card:#ffffff;--muted:#4b5563;--text:#111827;
+      --brand:#2563eb;--accent:#0ea5e9;--border:#e5e7eb;
     }
 
+    *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;background:var(--bg);color:var(--text)}
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .container{max-width:1000px;margin:0 auto;padding:24px}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
 
-    /* Header cuộn theo trang (không sticky) */
+    /* Header: sticky + nền đặc, đồng bộ các trang khác */
     header.site{
-      position: static; /* <- quan trọng: không sticky/fixed */
-      background: var(--bg);
-      border-bottom:1px solid var(--border)
+      position: static; top:0; z-index:1000;
+      background:var(--bg);
+      border-bottom:1px solid var(--border);
     }
-    .nav{display:flex;justify-content:space-between;align-items:center;gap:18px}
-    .brand{display:flex;align-items:center;gap:14px}
-    .brand img{width:80px;height:80px;border-radius:50%;border:2px solid var(--border)}
-    .links{display:flex;gap:16px;flex-wrap:wrap}
-    .toggle{border:1px solid var(--border);background:var(--card);color:var(--text);padding:6px 10px;border-radius:10px;cursor:pointer}
+    .nav{display:flex;gap:18px;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:14px;align-items:center}
+    .brand img{width:96px;height:96px;border-radius:50%;border:2px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+    .brand h1{font-size:22px;line-height:1.1;margin:0;font-weight:800}
+    .brand p{margin:3px 0 0 0;font-size:13px;color:var(--muted)}
 
-    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:24px}
-    h2{margin-top:20px}
+    .links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .links a{font-weight:700; color:var(--text)}             /* menu đậm */
+    .links a[aria-current="page"]{border-bottom:2px solid var(--brand)}
+    .toggle,.hamburger{border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer}
+    .hamburger{display:none;font-size:18px;line-height:1}
+
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+    .muted{color:var(--muted)}
+    h2{margin-top:22px}
     ul{padding-left:20px}
     .list{display:flex;flex-direction:column;gap:10px}
-
-    .pub{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px}
+    .pub{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
     .pub .meta{font-size:12px;color:var(--muted);margin-bottom:4px}
-    .muted{color:var(--muted);font-size:13px}
+
+    .profile-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border:1px solid var(--border); border-radius:999px;
+      background:var(--card); color:var(--text); font-size:14px; font-weight:600;
+    }
+    .badge svg{width:18px;height:18px;display:block}
+
     .footer{margin:40px auto 20px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
+
+    @media (max-width:900px){
+      .hamburger{display:inline-flex}
+      .links{
+        display:none; position:absolute; right:24px; top:82px; background:var(--card);
+        border:1px solid var(--border); border-radius:12px; padding:12px; flex-direction:column; gap:8px;
+        width:min(80vw,320px); box-shadow:0 8px 24px rgba(0,0,0,.18)
+      }
+      .links.open{display:flex}
+      .brand p{display:none}
+    }
   </style>
 </head>
 <body>
@@ -56,9 +77,29 @@
       <div>
         <h1>Le Anh Tuan Nguyen</h1>
         <p class="muted">Bien Hoa, Dong Nai, Vietnam</p>
+        <!-- Badges trên đầu: Scholar / ORCID / ResearchGate -->
+        <div class="profile-badges">
+          <a class="badge" href="https://scholar.google.se/citations?user=5pSwJhgAAAAJ&hl=en" target="_blank" rel="noopener" title="Google Scholar">
+            <!-- icon book -->
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 4h9a3 3 0 0 1 3 3v13H9a3 3 0 0 1-3-3V4Z" stroke="currentColor" stroke-width="1.6"/><path d="M6 18a3 3 0 0 0 3 3h9" stroke="currentColor" stroke-width="1.6"/></svg>
+            Scholar
+          </a>
+          <a class="badge" href="https://orcid.org/0000-0002-2451-7579" target="_blank" rel="noopener" title="ORCID">
+            <!-- ORCID circle -->
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><path d="M9 8v8" stroke="currentColor" stroke-width="1.6"/><path d="M13 8h2.2a2.8 2.8 0 0 1 0 5.6H13V8Z" stroke="currentColor" stroke-width="1.6"/></svg>
+            ORCID
+          </a>
+          <a class="badge" href="https://www.researchgate.net/profile/Tuan-Nguyen-587" target="_blank" rel="noopener" title="ResearchGate">
+            <!-- RG letters -->
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 7h6a3 3 0 0 1 0 6H5V7Z" stroke="currentColor" stroke-width="1.6"/><path d="M11 13l4 4" stroke="currentColor" stroke-width="1.6"/></svg>
+            ResearchGate
+          </a>
+        </div>
       </div>
     </div>
-    <nav class="links" role="navigation">
+
+    <button id="hamburger" class="hamburger" aria-label="Toggle menu" aria-controls="menu" aria-expanded="false">☰</button>
+    <nav id="menu" class="links" role="navigation">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="publications.html">Publications</a>
@@ -77,7 +118,7 @@
     <ul>
       <li>Computer-Aided Drug Design (CADD): pharmacophore modeling, docking, ADMET prediction, molecular dynamics, MM/GBSA, MM/PBSA</li>
       <li>Machine learning for QSAR and bioactivity/ADMET prediction</li>
-      <li>Cheminformatics pipelines to accelerate drug discovery</li>
+      <li>Cheminformatics pipelines to accelerate drug discovery; digital pedagogy in pharmaceutical education</li>
     </ul>
 
     <h2>Education</h2>
@@ -103,9 +144,9 @@
 
     <h2>Skills</h2>
     <ul>
-      <li><b>Molecular modeling & simulation tools</b>: GROMACS, MOE, Discovery Studio, Schrödinger, FlexX, VMD, Autodock</li>
+      <li><b>Molecular modeling & simulation tools</b>: GROMACS, MOE, Discovery Studio, Schrödinger, FlexX, VMD</li>
       <li><b>Data analysis & statistics</b>: Minitab, Matlab</li>
-      <li><b>Computational techniques</b>: Pharmacophore modeling, docking, ADMET, MDs, MM/GBSA, MM/PBSA</li>
+      <li><b>Computational techniques</b>: Pharmacophore modeling, docking, ADMET, MD analysis, MM/GBSA, MM/PBSA</li>
     </ul>
 
     <h2>Awards</h2>
@@ -121,11 +162,7 @@
 
 <div class="footer container">
   <div>© <span id="year"></span> Le Anh Tuan Nguyen</div>
-  <div>
-    <a href="https://scholar.google.se/citations?user=5pSwJhgAAAAJ&hl=en" target="_blank" rel="noopener">Scholar</a> ·
-    <a href="https://orcid.org/0000-0002-2451-7579" target="_blank" rel="noopener">ORCID</a> ·
-    <a href="https://www.researchgate.net/profile/Tuan-Nguyen-587" target="_blank" rel="noopener">ResearchGate</a>
-  </div>
+  <div class="muted">CV page • auto-updates publications from <code>content/publications.json</code></div>
 </div>
 
 <script>
@@ -142,31 +179,48 @@
     });
   }
 
+  // Mobile menu
+  const burger = document.getElementById('hamburger');
+  const menu = document.getElementById('menu');
+  if(burger && menu){
+    burger.addEventListener('click', ()=>{
+      const isOpen = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    menu.querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click', ()=>{
+        menu.classList.remove('open');
+        burger.setAttribute('aria-expanded','false');
+      });
+    });
+  }
+
   // Year
   const y = document.getElementById('year');
   if(y){ y.textContent = new Date().getFullYear(); }
 
-  // Utilities
+  // Safe helpers
   const esc = s => (s||"").toString().replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const fmtVenue = p => {
     const parts = [];
     if(p.journal) parts.push(p.journal);
-    const volIss = [p.volume, p.issue ? `(${p.issue})` : null].filter(Boolean).join('');
-    if(volIss) parts.push(volIss);
+    const vol = p.volume ? String(p.volume) : "";
+    const iss = p.issue ? `(${p.issue})` : "";
+    if(vol || iss) parts.push(vol + iss);
     if(p.pages) parts.push(p.pages);
     return parts.join(', ');
   };
 
-  // Load publications from JSON (relative to site root)
-  fetch("content/publications.json", {cache: "no-store"})
+  // Load publications.json (relative to site root)
+  fetch("content/publications.json", {cache:"no-store"})
     .then(r => {
       if(!r.ok) throw new Error("Cannot load publications.json");
       return r.json();
     })
     .then(data => {
       // sort by year desc
-      data.sort((a,b) => (b.year||0) - (a.year||0));
-      const html = data.map(p => {
+      data.sort((a,b)=>(b.year||0)-(a.year||0));
+      const html = data.map(p=>{
         const year = p.year || '';
         const type = p.type || '';
         const titleMain = esc(p.title_en || p.title || 'Untitled');
@@ -174,20 +228,21 @@
         const titleSub = showVI ? `<div class="muted">Original [VI]: <i>${esc(p.title)}</i></div>` : '';
         const authors = (p.authors||[]).map(esc).join(', ');
         const venue = esc(fmtVenue(p));
-        const doiLink = p.doi ? ` DOI: <a href="https://doi.org/${encodeURIComponent(p.doi)}" target="_blank" rel="noopener">${esc(p.doi)}</a>` : (p.url ? ` <a href="${esc(p.url)}" target="_blank" rel="noopener">link</a>` : '');
+        const doiLink = p.doi ? ` DOI: <a href="https://doi.org/${encodeURIComponent(p.doi)}" target="_blank" rel="noopener">${esc(p.doi)}</a>`
+                               : (p.url ? ` <a href="${esc(p.url)}" target="_blank" rel="noopener">link</a>` : '');
         return `
           <article class="pub">
             <div class="meta">${esc(year)} · ${esc(type)}</div>
             <p><b>${titleMain}</b>${titleSub}<br/>
             ${authors}${authors && (venue||doiLink) ? '. ' : ''}${venue}${venue && doiLink ? '. ' : ''}${doiLink}</p>
           </article>`;
-      }).join(""); // không dùng "\n" để tránh hiện ký tự lạ
+      }).join(""); // không dùng "\n"
       document.getElementById("publist").innerHTML = html || '<p class="muted">No publications found.</p>';
     })
-    .catch(err => {
+    .catch(err=>{
       console.error(err);
       document.getElementById("publist").innerHTML =
-        'Failed to load <code>content/publications.json</code>. Make sure this file exists in the site root.';
+        'Failed to load <code>content/publications.json</code>. Please ensure it exists under site root.';
     });
 })();
 </script>
