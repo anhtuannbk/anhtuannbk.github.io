@@ -27,7 +27,7 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
 .badge{display:inline-block;margin-left:6px;padding:2px 6px;border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--muted)}
 .list{display:flex;flex-direction:column;gap:12px}.footer{margin:40px auto 20px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
 @media (max-width:900px){.hamburger{display:inline-flex}.links{display:none;position:absolute;right:24px;top:72px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;flex-direction:column;gap:8px;width:min(80vw,320px)}.links.open{display:flex}.brand p{display:none}}
-</style>
+  </style>
 </head>
 <body>
   
@@ -45,7 +45,7 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="publications.html">Publications</a>
-      <a href="teaching.html">Teaching</a>
+      <a href="teaching.html" aria-current="page">Teaching</a>
       <a href="lab.html">Lab</a>
       <a href="activities.html">Activities</a>
       <a href="cv.html">CV</a>
@@ -59,7 +59,7 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
 <section class="card">
   <h3 class="section-title">Teaching</h3>
   <p class="muted">Create folders under <code>content/teaching/&lt;course&gt;/</code> and add Markdown files (e.g., <code>2025-09-10-intro.md</code>). They will show up automatically.</p>
-  <div id="teach"></div>
+  <div id="teach" aria-live="polite"></div>
 </section>
 
     
@@ -106,10 +106,13 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
   
 <script>
 (async function(){ 
-  const user = "anhtuannbk";
-  const repo = "anhtuannbk.github.io";
-  const branch = "main";
+  // ====== CONFIGURE YOUR REPO HERE ======
+  const user = "anhtuannbk";              // GitHub username
+  const repo = "anhtuannbk.github.io";    // Repository name
+  const branch = "main";                  // Branch
   const hostApi = "https://api.github.com";
+  // ======================================
+
   const container = document.getElementById('teach');
   if(!container) return;
 
@@ -120,11 +123,9 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
     const arr = await res.json();
     return arr.filter(x=>x.type==='dir').map(x=>x.name);
   }
-  const groups = await listCourses();
 
-
-  async function listFiles(course){
-    const url = `${hostApi}/repos/${user}/${repo}/contents/content/teaching/course/??REF??${branch}`.replace("??REF??","?ref=");
+  async function listFiles(courseName){
+    const url = `${hostApi}/repos/${user}/${repo}/contents/content/teaching/${courseName}?ref=${branch}`;
     const res = await fetch(url);
     if(!res.ok) return [];
     const arr = await res.json();
@@ -140,40 +141,43 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
   function sectionTpl(title, itemsHtml){
     return `
       <section class="card" style="margin-top:16px;">
-        <h4 style="margin:0 0 8px 0;">${course}</h4>
+        <h4 style="margin:0 0 8px 0;">${title}</h4>
         <div class="list">${itemsHtml}</div>
       </section>`;
   }
 
-  const groups = groups;
+  const groups = await listCourses();
   if(groups.length===0){
     container.innerHTML = '<p class="muted">No courses yet. Create folders under <code>content/teaching/</code>.</p>';
     return;
   }
 
   const sections = [];
-  for(const g of groups){
-    try {
+  for (const g of groups){
+    try{
       const files = await listFiles(g);
       if(files.length===0){
         sections.push(sectionTpl(g, '<p class="muted">No posts yet for this course.</p>'));
         continue;
       }
+      // Sort newest-first by filename (e.g., 2025-09-10-...)
       files.sort((a,b)=> b.name.localeCompare(a.name));
+
       const posts = await Promise.all(files.map(async f=>{
-        const raw = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/content/teaching/`.concat(g,"/",f.name);
+        const raw = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/content/teaching/${g}/${f.name}`;
         const text = await loadFile(raw);
         if(!text) return '';
         const html = window.marked ? window.marked.parse(text) : `<pre>${text.replace(/[&<>]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]))}</pre>`;
         return `<article class="pub"><div class="meta"><span class="pill">${g}</span><span class="pill">${f.name}</span></div>${html}</article>`;
       }));
-      sections.push(sectionTpl(g, posts.join('\\n')));
-    } catch(e){
+
+      sections.push(sectionTpl(g, posts.join('\n')));
+    }catch(e){
       console.error(e);
       sections.push(sectionTpl(g, '<p class="muted">Cannot load this course now.</p>'));
     }
   }
-  container.innerHTML = sections.join('\\n');
+  container.innerHTML = sections.join('\n');
 })();
 </script>
 
