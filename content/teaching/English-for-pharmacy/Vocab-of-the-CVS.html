@@ -1,0 +1,80 @@
+﻿
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Flashcards — Essential vocab of the CVS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme:{ extend:{ colors:{ primary:'#007AFF' } } }, darkMode:'class' };
+  </script>
+  <style>
+    .flashcard-perspective { perspective: 1000px; }
+    #flashcard-inner { transition: transform .6s ease; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
+    #flashcard-inner.is-flipped { transform: rotateY(180deg); }
+    .flashcard-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .flashcard-container { overflow:hidden; }
+  </style>
+</head>
+<body class="min-h-screen bg-zinc-100 text-zinc-900 antialiased">
+  <header class="px-4 py-4 sm:py-6 bg-white/80 backdrop-blur border-b border-zinc-200 sticky top-0 z-10">
+    <div class="max-w-3xl mx-auto flex items-center justify-between">
+      <h1 class="text-xl sm:text-2xl font-bold">Essential vocab of the CVS</h1>
+      <a href="/teaching.html" class="text-sm text-blue-600 hover:underline">← Back to Teaching</a>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto p-4 sm:p-6">
+    <div class="flashcard-container p-4 sm:p-6 bg-white rounded-xl shadow border border-zinc-200">
+      <div class="flashcard-perspective w-full max-w-[640px] mx-auto aspect-[4/5] sm:aspect-[3/2]">
+        <div id="flashcard-inner" class="relative w-full h-full text-center cursor-pointer select-none">
+          <div id="flashcard-front" class="flashcard-face absolute inset-0 flex items-center justify-center p-6 sm:p-8 rounded-xl bg-zinc-50 border border-zinc-200">
+            <div class="flashcard-text text-lg sm:text-2xl font-medium">Đang tải…</div>
+          </div>
+          <div id="flashcard-back" class="flashcard-face absolute inset-0 flex items-center justify-center p-6 sm:p-8 rounded-xl bg-zinc-50 border border-zinc-200" style="transform: rotateY(180deg);">
+            <div class="flashcard-text text-lg sm:text-2xl font-medium">Đang tải…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-wrap items-center gap-3 justify-between border-t border-zinc-200 pt-4">
+        <button id="flashcard-prev-btn" class="px-4 py-2 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-100 disabled:opacity-50">&lt; Trước</button>
+        <span id="flashcard-status" class="text-sm text-zinc-600">Thẻ ? / ?</span>
+        <button id="flashcard-next-btn" class="px-4 py-2 rounded-lg border border-zinc-300 bg-white hover:bg-zinc-100 disabled:opacity-50">Sau &gt;</button>
+      </div>
+      <div class="mt-3">
+        <button id="flashcard-flip-btn" class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700">Lật thẻ</button>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    function addInteractivity(root, state){
+      if(!root || !state || !state.cards || !state.cards.length) return;
+      const cards = state.cards; let idx = 0;
+      const inner = root.querySelector('#flashcard-inner');
+      const front = root.querySelector('#flashcard-front .flashcard-text');
+      const back  = root.querySelector('#flashcard-back  .flashcard-text');
+      const prev  = root.querySelector('#flashcard-prev-btn');
+      const next  = root.querySelector('#flashcard-next-btn');
+      const stat  = root.querySelector('#flashcard-status');
+      const flip  = root.querySelector('#flashcard-flip-btn');
+      function update(){ const flipped = inner.classList.contains('is-flipped'); stat.textContent = `Thẻ ${idx+1} / ${cards.length} - ${flipped?'Mặt sau':'Mặt trước'}`; }
+      function show(i){ if(i<0||i>=cards.length) return; idx=i; const c=cards[idx]; front.textContent=c.front; back.textContent=c.back; inner.classList.remove('is-flipped'); prev.disabled=(idx===0); next.disabled=(idx===cards.length-1); update(); }
+      function flipIt(){ inner.classList.toggle('is-flipped'); update(); }
+      flip.addEventListener('click', flipIt); inner.addEventListener('click', flipIt);
+      prev.addEventListener('click', e=>{ e.stopPropagation(); show(idx-1); });
+      next.addEventListener('click', e=>{ e.stopPropagation(); show(idx+1); });
+      document.addEventListener('keydown', e=>{ if(/^(INPUT|TEXTAREA)$/i.test(document.activeElement.tagName)) return; if(e.key==='ArrowLeft'&&!prev.disabled) show(idx-1); else if(e.key==='ArrowRight'&&!next.disabled) show(idx+1); else if([' ','ArrowUp','ArrowDown'].includes(e.key)){ e.preventDefault(); flipIt(); }});
+      show(0);
+    }
+    document.addEventListener('DOMContentLoaded',()=>{
+      const host = document.querySelector('.flashcard-container');
+      let state=null; try{ state = JSON.parse(`{"cards":[{"id":0,"front":"Essential / Secondary hypertension","back":"Tăng huyết áp nguyên phát / thứ phát"},{"id":1,"front":"Hypertensive crisis","back":"Tăng huyết áp cấp / Cơn tăng huyết áp"},{"id":2,"front":"Hypertensive emergency","back":"Tăng huyết áp cấp cứu"},{"id":3,"front":"Hypertensive urgency","back":"Tăng huyết áp khẩn cấp"},{"id":4,"front":"Atherosclerosis","back":"Xơ vữa động mạch"},{"id":5,"front":"Plaque","back":"Mảng xơ vữa"},{"id":6,"front":"Ischemic heart disease","back":"Bệnh tim thiếu máu cục bộ"},{"id":7,"front":"Ischemia","back":"Thiếu máu cục bộ"},{"id":8,"front":"Angina","back":"Đau thắt ngực"},{"id":9,"front":"Bacterial endocarditis","back":"Viêm nội tâm mạc nhiễm khuẩn"},{"id":10,"front":"Arrhythmia","back":"Loạn nhịp tim"},{"id":11,"front":"Bradycardia / Tachycardia","back":"Nhịp tim chậm / nhanh"},{"id":12,"front":"Transient ischemic attack (TIA)","back":"Cơn thiếu máu não thoáng qua"},{"id":13,"front":"Cerebrovascular accident (CVA, stroke)","back":"Tai biến mạch máu não / Đột quỵ"},{"id":14,"front":"Anemia","back":"Thiếu máu"},{"id":15,"front":"Hyperlipidemia","back":"Tăng lipid máu"},{"id":16,"front":"Antihypertensive","back":"Thuốc hạ huyết áp"},{"id":17,"front":"Diuretic","back":"Thuốc lợi tiểu"},{"id":18,"front":"Antiarrhythmic","back":"Thuốc chống loạn nhịp"},{"id":19,"front":"Anticoagulant","back":"Thuốc chống đông"},{"id":20,"front":"Antiplatelet agents","back":"Thuốc chống kết tập tiểu cầu"},{"id":21,"front":"Thrombolytic","back":"Thuốc tiêu huyết khối"},{"id":22,"front":"Vasoconstrictor","back":"Thuốc co mạch"},{"id":23,"front":"Vasodilator","back":"Thuốc giãn mạch"},{"id":24,"front":"Chest pain (CP)","back":"Đau ngực"},{"id":25,"front":"Palpitation","back":"Hồi hộp, tim đập nhanh"},{"id":26,"front":"Light-headed","back":"Chóng mặt"},{"id":27,"front":"Shortness of breath (SOB)","back":"Khó thở"},{"id":28,"front":"Edema","back":"Phù"},{"id":29,"front":"Hypotension","back":"Hạ huyết áp"},{"id":30,"front":"Right / Left pulmonary artery","back":"Động mạch phổi phải / trái"},{"id":31,"front":"Superior/ Inferior vena cava","back":"Tĩnh mạch chủ trên/ dưới"},{"id":32,"front":"Pulmonary veins","back":"Tĩnh mạch phổi"},{"id":33,"front":"Right / Left atrium","back":"Tâm nhĩ phải / trái"},{"id":34,"front":"Right / Left ventricle","back":"Tâm thất phải / trái"},{"id":35,"front":"Aorta","back":"Động mạch chủ"},{"id":36,"front":"Pulmonic semilunar valve","back":"Van bán nguyệt phổi"},{"id":37,"front":"Aortic semilunar valve","back":"Van bán nguyệt động mạch chủ"},{"id":38,"front":"Mitral (bicuspid) valve","back":"Van hai lá"},{"id":39,"front":"Tricuspid valve","back":"Van ba lá"},{"id":40,"front":"Venule","back":"Tiểu tĩnh mạch"},{"id":41,"front":"Arteriole","back":"Tiểu động mạch"},{"id":42,"front":"Capillary","back":"Mao mạch"},{"id":43,"front":"Erythrocyte","back":"Hồng cầu"},{"id":44,"front":"Leukocyte","back":"Bạch cầu"},{"id":45,"front":"Thrombocyte","back":"Tiểu cầu"},{"id":46,"front":"angi/o","back":"mạch máu"},{"id":47,"front":"vascul/o","back":"mạch"},{"id":48,"front":"aort/o","back":"động mạch chủ"},{"id":49,"front":"arteri/o","back":"động mạch"},{"id":50,"front":"arteriol/o","back":"tiểu động mạch"},{"id":51,"front":"atri/o","back":"tâm nhĩ"},{"id":52,"front":"ather/o","back":"(mảng xơ) mỡ, chất béo"},{"id":53,"front":"cardi/o","back":"tim"},{"id":54,"front":"coron/o","back":"tim (thuộc về mạch vành)"},{"id":55,"front":"electr/o","back":"điện"},{"id":56,"front":"my/o","back":"cơ"},{"id":57,"front":"phleb/o","back":"tĩnh mạch"},{"id":58,"front":"ven/o","back":"tĩnh mạch"},{"id":59,"front":"scler/o","back":"xơ cứng"},{"id":60,"front":"sten/o","back":"hẹp"},{"id":61,"front":"thromb/o","back":"huyết khối"},{"id":62,"front":"valv/o","back":"van"},{"id":63,"front":"valvul/o","back":"van"},{"id":64,"front":"ventricul/o","back":"tâm thất"},{"id":65,"front":"brady-","back":"chậm"},{"id":66,"front":"endo-","back":"trong"},{"id":67,"front":"extra-","back":"ngoài"},{"id":68,"front":"peri-","back":"quanh"},{"id":69,"front":"trans-","back":"qua, xuyên"}]}`); }catch(e){ console.error(e); }
+      addInteractivity(host, state);
+    });
+  </script>
+</body>
+
+</html>
