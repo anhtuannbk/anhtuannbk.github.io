@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -58,13 +59,13 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
     
 <section class="card">
   <h3 class="section-title">Teaching</h3>
-  <p class="muted">Create folders under <code>content/teaching/&lt;course&gt;/</code> and add Markdown files (e.g., <code>2025-09-10-intro.md</code>). They will show up automatically. Put simple links inside those .md files.</p>
+  <p id="teaching-help" class="muted">Create folders under <code>content/teaching/&lt;course&gt;/</code> and add Markdown files (e.g., <code>2025-09-10-intro.md</code>). They will show up automatically. Put simple links inside those .md files.</p>
   <div id="teach" aria-live="polite"></div>
 </section>
 
     
 <div class="footer">
-  <div>© <span id="year"></span> Le Anh Tuan Nguyen. Minimal design inspired by AcademicPages.</div>
+  <div>© <span id="year"></span> Le Anh Tuan Nguyen.</div>
   <div><a href="index.html">Home</a></div>
 </div>
 
@@ -114,6 +115,7 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
   // ====================
 
   const container = document.getElementById('teach');
+  const help = document.getElementById('teaching-help'); // <-- thêm dòng này
   if(!container) return;
 
   function showError(msg){
@@ -180,17 +182,15 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
             const text = await loadRaw(course, f.name);
             const html = window.marked ? window.marked.parse(text)
               : `<pre>${text.replace(/[&<>]/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]))}</pre>`;
-            return `<article class="pub">
-              <div class="meta"><span class="pill">${course}</span><span class="pill">${f.name}</span></div>
-              ${html}
-            </article>`;
-          }catch(e){
-            console.error(e);
-            return `<article class="pub">
-              <div class="meta"><span class="pill">${course}</span><span class="pill">${f.name}</span></div>
-              <p class="muted">Cannot load this post. Check raw URL & file name.</p>
-            </article>`;
-          }
+              return `<article class="pub">
+                ${html}
+              </article>`;
+              } catch(e){
+                console.error(e);
+                return `<article class="pub">
+                  <p class="muted">Cannot load this post. Check raw URL & file name.</p>
+                </article>`;
+              }
         }));
 
         sections.push(sectionTpl(course, posts.join('\n')));
@@ -201,6 +201,7 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
     }
 
     container.innerHTML = sections.join('\n');
+if (help && sections.length > 0) help.remove();
   }catch(e){
     console.error(e);
     showError(e.message);
@@ -210,3 +211,4 @@ header.site{position: static;top:0;z-index:50;backdrop-filter:none;background: v
 
 </body>
 </html>
+
