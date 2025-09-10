@@ -1,7 +1,7 @@
 [
   {
     "year": 2025,
-    "type": "journal",
+    "type": "Journal Article",
     "title": "Zoanthamine-Type Alkaloids Derived from Cultured Zoanthus kuroshio with Therapeutic Potential Against Osteoporosis",
     "authors": [
       "Ngoc-Thac Pham",
@@ -29,7 +29,7 @@
   },
   {
     "year": 2025,
-    "type": "journal",
+    "type": "Journal Article",
     "title": "Application of bioactive molecular networking to identify corneal-cytoprotective compounds from Dialium cochinchinense Pierre leaves",
     "authors": [
       "Thi Tuyet Nhung Nguyen",
@@ -53,7 +53,7 @@
   },
   {
     "year": 2025,
-    "type": "journal",
+    "type": "Journal Article",
     "title": "Nghiên cứu in silico tìm kiếm các hợp chất ức chế acid cạnh tranh kali trong điều trị loét dạ dày tá tràng",
     "title_en": "In silico identification of potassium-competitive acid blocker candidates for peptic ulcer treatment",
     "authors": [
@@ -71,7 +71,7 @@
   },
   {
     "year": 2025,
-    "type": "journal",
+    "type": "Journal Article",
     "title": "Sàng lọc in silico các phân tử nhỏ có khả năng ức chế thụ thể AT1 để nghiên cứu phát triển thuốc điều trị bệnh tăng huyết áp",
     "title_en": "In silico screening of small molecules as AT1 receptor inhibitors for antihypertensive drug development",
     "authors": [
@@ -90,7 +90,7 @@
   },
   {
     "year": 2024,
-    "type": "journal",
+    "type": "Journal Article",
     "title": "Sàng lọc in silico các phân tử nhỏ có khả năng ức chế men chuyển angiotensin",
     "title_en": "In silico screening of small molecules as angiotensin-converting enzyme inhibitors",
     "authors": [
@@ -108,7 +108,7 @@
   },
   {
     "year": 2023,
-    "type": "conference",
+    "type": "Conference",
     "title": "Discovery of natural interleukin 36γ small molecule inhibitors by pharmacophore screening, docking analysis, ADMET prediction, and molecular dynamics simulations",
     "authors": [
       "Tuan Le-Anh Nguyen",
@@ -124,7 +124,7 @@
   },
   {
     "year": 2021,
-    "type": "journal",
+    "type": "Journal Article",
     "title": "Sàng lọc in silico các phân tử nhỏ có khả năng ức chế hoạt tính interleukin-36γ",
     "title_en": "In silico screening of small molecules as interleukin-36γ activity inhibitors",
     "authors": [
@@ -141,7 +141,7 @@
   },
   {
     "year": 2020,
-    "type": "journal",
+    "type": "Journal Article",
     "title": "Sàng lọc in silico các cấu trúc phân tử nhỏ ức chế hoạt tính interleukin-17A trong điều trị các bệnh tự miễn",
     "title_en": "In silico screening of small molecules inhibiting interleukin-17A activity for autoimmune disease treatment",
     "authors": [
@@ -165,7 +165,7 @@
   },
   {
     "year": 2019,
-    "type": "journal",
+    "type": "Journal Article",
     "title": "Nghiên cứu xây dựng mô hình QSAR nhị phân và Pharmacophore trên các chất ức chế cytochrom P450 CYP2D6",
     "title_en": "Development of binary QSAR models and a pharmacophore for cytochrome P450 CYP2D6 inhibitors",
     "authors": [
@@ -188,7 +188,7 @@
   },
   {
     "year": 2018,
-    "type": "conference",
+    "type": "Conference",
     "title": "Efflux pump inhibitors approach to combat multidrug resistant bacteria",
     "authors": [
       "Khac-Minh Thai",
