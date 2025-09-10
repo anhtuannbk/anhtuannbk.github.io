@@ -1,3 +1,3 @@
 # Flashcards
 
-- [Essential vocab of the CVS](content/teaching/english-for-pharmacy/Vocab-of-the-CVS.html)
+- [Essential vocab of the CVS](content/teaching/English-for-pharmacy/Vocab.html)
